@@ -42,7 +42,16 @@ task createCoreWrapperDir {
 // For this to work, it's assumed SWIG is installed
 // TODO: This only works when called from Command Line (gradlew runSwig)
 task runSwig(type:Exec, dependsOn: ['createCoreWrapperDir']) {
-    workingDir '/src/main/jni'          // This implicitly starts from $(projectDir) evidently
-    commandLine 'cmd', '/c', 'swig'     // This is the command line for Windows only (Linux doesn't need cmd and /c)
-    args '-c++', '-java', '-package', 'com.sureshjoshi.core', '-outdir', coreWrapperDir.absolutePath, 'SeePlusPlus.i'
+
+    String osName = System.getProperty("os.name").toLowerCase();
+    if (osName.contains("windows")) {
+        workingDir '/src/main/jni'   // This implicitly starts from $(projectDir) evidently
+        commandLine 'cmd', '/c', 'swig'
+        args '-c++', '-java', '-package', 'com.sureshjoshi.core', '-outdir', coreWrapperDir.absolutePath, 'SeePlusPlus.i'
+    }
+    else {
+        commandLine 'swig'
+        args '-c++', '-java', '-package', 'com.sureshjoshi.core', '-outdir', coreWrapperDir.absolutePath, "${projectDir}/src/main/jni/SeePlusPlus.i"
+    }
+
 }

@@ -26,3 +26,5 @@ proguard/
 *.log
 workspace.xml
 NDKExample/.idea/libraries
+SeePlusPlus_wrap.cxx
+NDKExample/app/src/main/java/com/sureshjoshi/core
