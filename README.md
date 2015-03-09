@@ -9,7 +9,8 @@ The dependencies are:
 * [Gradle Tools (1.0+)](https://developer.android.com/tools/studio/index.html#build-system)
 * [Android NDK](https://developer.android.com/tools/sdk/ndk/index.html)
 * [SWIG](http://www.swig.org/)
-* 
+
+
 License
 -------
 
