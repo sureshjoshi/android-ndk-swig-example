@@ -1,9 +1,7 @@
 package com.sureshjoshi.android.ndkexample;
 
-import android.support.v7.app.ActionBarActivity;
+import android.app.Activity;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.sureshjoshi.core.IntVector;
@@ -12,34 +10,34 @@ import com.sureshjoshi.core.StringVector;
 
 import java.util.Random;
 
+import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.InjectView;
 import butterknife.OnClick;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity {
 
     static {
         // Use the same name as defined in app.gradle (do not add the 'lib' or the '.so')
         System.loadLibrary("SeePlusPlus");
     }
 
-    private SeePlusPlus _cpp;
+    private SeePlusPlus mCpp;
 
-    @InjectView(R.id.textview_multiply_int)
-    TextView textviewMultiplyInt;
+    @Bind(R.id.textview_multiply_int)
+    TextView mTextviewMultiplyInt;
 
-    @InjectView(R.id.textview_multiply_double)
-    TextView textviewMultiplyDouble;
+    @Bind(R.id.textview_multiply_double)
+    TextView mTextviewMultiplyDouble;
 
-    @InjectView(R.id.textview_random_numbers)
-    TextView textviewRandomNumbers;
+    @Bind(R.id.textview_random_numbers)
+    TextView mTextviewRandomNumbers;
 
-    @InjectView(R.id.textview_unsorted_strings)
-    TextView textviewUnsortedStrings;
+    @Bind(R.id.textview_unsorted_strings)
+    TextView mTextviewUnsortedStrings;
 
-    @InjectView(R.id.textview_sorted_strings)
-    TextView textviewSortedStrings;
+    @Bind(R.id.textview_sorted_strings)
+    TextView mTextviewSortedStrings;
 
     @OnClick(R.id.button_refresh)
     void onClick() {
@@ -50,68 +48,63 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
-        _cpp = new SeePlusPlus();
+        mCpp = new SeePlusPlus();
         runNativeFunctions();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-    private void runNativeFunctions() {
+    void runNativeFunctions() {
         runMultiplyInts();
         runMultiplyDoubles();
         runRandomNumbers();
         runSortString();
     }
 
-    private void runMultiplyInts() {
+    void runMultiplyInts() {
         // Generate two random ints in range 0..99
         Random randomGenerator = new Random();
         int x = randomGenerator.nextInt(100);
         int y = randomGenerator.nextInt(100);
 
-        int result = _cpp.Multiply(x, y);
+        int result = mCpp.Multiply(x, y);
 
         String message = getString(R.string.multiply_int)
                 + " " + Integer.toString(x)
                 + " and " + Integer.toString(y) + " = " + Integer.toString(result);
-        textviewMultiplyInt.setText(message);
+        mTextviewMultiplyInt.setText(message);
     }
 
-    private void runMultiplyDoubles() {
+    void runMultiplyDoubles() {
         // Generate two random doubles in range 0..99
         double x = Math.random() * 100.0;
         double y = Math.random() * 100.0;
 
-        double result = _cpp.Multiply(x, y);
+        double result = mCpp.Multiply(x, y);
 
         String message = getString(R.string.multiply_double)
                 + " " + String.format("%.2f", x)
                 + " and " + String.format("%.2f", y) + " = "
                 + String.format("%.2f", result);
-        textviewMultiplyDouble.setText(message);
+        mTextviewMultiplyDouble.setText(message);
     }
 
-    private void runRandomNumbers() {
+    void runRandomNumbers() {
         // Print out random numbers
         Random randomGenerator = new Random();
         int size = randomGenerator.nextInt(10);
-        IntVector numbers = _cpp.RandomNumbers(size);
+        IntVector numbers = mCpp.RandomNumbers(size);
 
         String message = getString(R.string.random_numbers) + " ";
         for (int i = 0; i < size; ++i) {
             message += numbers.get(i);
             message += " ";
         }
-        textviewRandomNumbers.setText(message);
+        mTextviewRandomNumbers.setText(message);
     }
 
-    private void runSortString() {
-        // Create an unsorted set of strings by splitting on whitespace
+    void runSortString() {
+        // Create an unsorted set of strings by splitting on commas
         String unsortedString = "lorem,ipsum,dolor,sit,amet,consectetur,adipiscing,elit";
         String[] unsortedStrings = unsortedString.split(",");
 
@@ -120,38 +113,19 @@ public class MainActivity extends ActionBarActivity {
             unsortedStringVector.add(value);
         }
 
-        StringVector sortedStringVector = _cpp.Sort(unsortedStringVector);
+        StringVector sortedStringVector = mCpp.Sort(unsortedStringVector);
 
         String message = getString(R.string.unsorted_strings) + " " + unsortedString;
-        textviewUnsortedStrings.setText(message);
+        mTextviewUnsortedStrings.setText(message);
 
-        message = getString(R.string.sorted_strings) + " ";
-        for (int i = 0; i < sortedStringVector.size(); ++i) {
-            message += sortedStringVector.get(i);
-            message += ",";
+        StringBuilder sortedMessage = new StringBuilder();
+        sortedMessage.append(getString(R.string.sorted_strings))
+                .append(" ");
+        int size = (int) sortedStringVector.size();
+        for (int i = 0; i < size; ++i) {
+            sortedMessage.append(sortedStringVector.get(i))
+                    .append(",");
         }
-        textviewSortedStrings.setText(message);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
+        mTextviewSortedStrings.setText(sortedMessage.toString());
     }
 }
