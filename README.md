@@ -3,6 +3,17 @@ This project is a full example of using Android Studio (1.0+), Gradle (1.0+), ND
 
 Explained in detail here: http://www.sureshjoshi.com/mobile/android-ndk-in-android-studio-with-swig/
 
+Here are the from-scratch build steps (if you were going to build in your home directory on Linux/Mac - similar for Windows, with slightly revised commands and locations):
+
+    cd ~/
+    git clone https://github.com/sureshjoshi/android-ndk-swig-example.git
+    [Open in Android Studio and let Gradle run and the project get indexed - this creates local.properties and the sdk.dir]
+    cd android-ndk-swig-example/NDKExample
+    ./gradlew runSwig
+    (In Android Studio) Make Project
+
+That should build error-free (assuming you’ve set up your ndk.dir in local.properties).
+
 The dependencies are:
 
 * [Android Studio (1.0+)](https://developer.android.com/tools/studio/index.html)
