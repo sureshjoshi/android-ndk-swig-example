@@ -39,6 +39,9 @@ public class MainActivity extends Activity {
     @Bind(R.id.textview_sorted_strings)
     TextView mTextviewSortedStrings;
 
+    @Bind(R.id.textview_android_studio_ndk_integration)
+    TextView mTextviewAndroidStudioNdkIntegration;
+
     @OnClick(R.id.button_refresh)
     void onClick() {
         runNativeFunctions();
@@ -55,13 +58,14 @@ public class MainActivity extends Activity {
     }
 
     void runNativeFunctions() {
-        runMultiplyInts();
-        runMultiplyDoubles();
-        runRandomNumbers();
-        runSortString();
+        mTextviewMultiplyInt.setText(runMultiplyInts());
+        mTextviewMultiplyDouble.setText(runMultiplyDoubles());
+        mTextviewRandomNumbers.setText(runRandomNumbers());
+        mTextviewSortedStrings.setText(runSortString());
+        mTextviewAndroidStudioNdkIntegration.setText(runAndroidStudioNativeString());
     }
 
-    void runMultiplyInts() {
+    String runMultiplyInts() {
         // Generate two random ints in range 0..99
         Random randomGenerator = new Random();
         int x = randomGenerator.nextInt(100);
@@ -69,27 +73,25 @@ public class MainActivity extends Activity {
 
         int result = mCpp.Multiply(x, y);
 
-        String message = getString(R.string.multiply_int)
+        return getString(R.string.multiply_int)
                 + " " + Integer.toString(x)
                 + " and " + Integer.toString(y) + " = " + Integer.toString(result);
-        mTextviewMultiplyInt.setText(message);
     }
 
-    void runMultiplyDoubles() {
+    String runMultiplyDoubles() {
         // Generate two random doubles in range 0..99
         double x = Math.random() * 100.0;
         double y = Math.random() * 100.0;
 
         double result = mCpp.Multiply(x, y);
 
-        String message = getString(R.string.multiply_double)
+        return getString(R.string.multiply_double)
                 + " " + String.format("%.2f", x)
                 + " and " + String.format("%.2f", y) + " = "
                 + String.format("%.2f", result);
-        mTextviewMultiplyDouble.setText(message);
     }
 
-    void runRandomNumbers() {
+    String runRandomNumbers() {
         // Print out random numbers
         Random randomGenerator = new Random();
         int size = randomGenerator.nextInt(10);
@@ -100,10 +102,10 @@ public class MainActivity extends Activity {
             message += numbers.get(i);
             message += " ";
         }
-        mTextviewRandomNumbers.setText(message);
+        return message;
     }
 
-    void runSortString() {
+    String runSortString() {
         // Create an unsorted set of strings by splitting on commas
         String unsortedString = "lorem,ipsum,dolor,sit,amet,consectetur,adipiscing,elit";
         String[] unsortedStrings = unsortedString.split(",");
@@ -126,6 +128,9 @@ public class MainActivity extends Activity {
             sortedMessage.append(sortedStringVector.get(i))
                     .append(",");
         }
-        mTextviewSortedStrings.setText(sortedMessage.toString());
+        return sortedMessage.toString();
     }
+
+    native String runAndroidStudioNativeString();
+
 }

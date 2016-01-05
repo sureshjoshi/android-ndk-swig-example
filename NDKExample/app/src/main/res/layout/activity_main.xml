@@ -53,4 +53,11 @@
         android:layout_height="wrap_content"
         android:textSize="20sp" />
 
+    <TextView
+        android:id="@+id/textview_android_studio_ndk_integration"
+        android:text="@string/sorted_strings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp" />
+
 </LinearLayout>
