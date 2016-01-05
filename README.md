@@ -21,6 +21,7 @@ The dependencies are:
 * [Android NDK](https://developer.android.com/tools/sdk/ndk/index.html)
 * [SWIG](http://www.swig.org/)
 
+Note: I have updated the Github repo (in the develop branch) to use Android Studio 1.5 with the latest experimental Gradle plugin (0.6.0-alpha3).
 
 License
 -------
