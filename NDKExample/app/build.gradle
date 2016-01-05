@@ -1,28 +1,35 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.model.application'
 
-android {
-    compileSdkVersion 22
-    buildToolsVersion "22.0.1"
+// Manifest version information
+def versionMajor = 1
+def versionMinor = 1
+def versionPatch = 0
 
-    defaultConfig {
-        applicationId "com.sureshjoshi.android.ndkexample"
-        minSdkVersion 15
-        targetSdkVersion 22
-        versionCode 1
-        versionName "1.0.0"
+model {
+    android {
+        compileSdkVersion = 22
+        buildToolsVersion = "22.0.1"
 
-        ndk {
-            moduleName "SeePlusPlus" // Name of C++ module (i.e. libSeePlusPlus)
-            cFlags "-std=c++11 -fexceptions" // Add provisions to allow C++11 functionality
-            stl "gnustl_shared" // Which STL library to use: gnustl or stlport
+        defaultConfig.with {
+            applicationId = "com.sureshjoshi.android.ndkexample"
+            minSdkVersion.apiLevel = 15
+            targetSdkVersion.apiLevel = 22
+            versionCode = versionMajor * 10000 + versionMinor * 100 + versionPatch
+            versionName = "${versionMajor}.${versionMinor}.${versionPatch}"
         }
     }
 
-    buildTypes {
+    android.buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            minifyEnabled = false
         }
+    }
+
+    android.ndk {
+        moduleName = "SeePlusPlus" // Name of C++ module (i.e. libSeePlusPlus)
+        cppFlags.add("-std=c++11") // Add provisions to allow C++11 functionality
+        cppFlags.add("-fexceptions")
+        stl = "gnustl_shared" // Which STL library to use: gnustl or stlport
     }
 }
 
@@ -41,15 +48,14 @@ task createCoreWrapperDir {
 
 // For this to work, it's assumed SWIG is installed
 // TODO: This only works when called from Command Line (gradlew runSwig)
-task runSwig(type:Exec, dependsOn: ['createCoreWrapperDir']) {
+task runSwig(type: Exec, dependsOn: ['createCoreWrapperDir']) {
 
     String osName = System.getProperty("os.name").toLowerCase();
     if (osName.contains("windows")) {
         workingDir '/src/main/jni'   // This implicitly starts from $(projectDir) evidently
         commandLine 'cmd', '/c', 'swig'
         args '-c++', '-java', '-package', 'com.sureshjoshi.core', '-outdir', coreWrapperDir.absolutePath, 'SeePlusPlus.i'
-    }
-    else {
+    } else {
         commandLine 'swig'
         args '-c++', '-java', '-package', 'com.sureshjoshi.core', '-outdir', coreWrapperDir.absolutePath, "${projectDir}/src/main/jni/SeePlusPlus.i"
     }
