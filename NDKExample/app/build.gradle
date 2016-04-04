@@ -39,6 +39,11 @@ dependencies {
     compile 'com.jakewharton:butterknife:7.0.1'
 }
 
+// Adds dependecy on runSwig to JavaCompile task.
+tasks.withType(JavaCompile) {
+    compileTask -> compileTask.dependsOn runSwig
+}
+
 // Location of where to store the jni wrapped files
 def coreWrapperDir = new File("${projectDir}/src/main/java/com/sureshjoshi/core")
 
