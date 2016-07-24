@@ -10,10 +10,9 @@ import com.sureshjoshi.core.StringVector;
 
 import java.util.Random;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-
 
 public class MainActivity extends Activity {
 
@@ -24,19 +23,19 @@ public class MainActivity extends Activity {
 
     private SeePlusPlus mCpp;
 
-    @Bind(R.id.textview_multiply_int)
+    @BindView(R.id.textview_multiply_int)
     TextView mTextviewMultiplyInt;
 
-    @Bind(R.id.textview_multiply_double)
+    @BindView(R.id.textview_multiply_double)
     TextView mTextviewMultiplyDouble;
 
-    @Bind(R.id.textview_random_numbers)
+    @BindView(R.id.textview_random_numbers)
     TextView mTextviewRandomNumbers;
 
-    @Bind(R.id.textview_unsorted_strings)
+    @BindView(R.id.textview_unsorted_strings)
     TextView mTextviewUnsortedStrings;
 
-    @Bind(R.id.textview_sorted_strings)
+    @BindView(R.id.textview_sorted_strings)
     TextView mTextviewSortedStrings;
 
     @OnClick(R.id.button_refresh)
