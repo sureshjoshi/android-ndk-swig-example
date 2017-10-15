@@ -43,16 +43,33 @@ find_library( # Sets the name of the path variable.
               # you want CMake to locate.
               log )
 
+# Fail the build if SWIG is not found - Ensure SWIG is installed and on the system path
+
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
-set(CMAKE_SWIG_FLAGS -package com.sureshjoshi.core -c++)
-set(CMAKE_SWIG_OUTDIR src/main/cpp)
 
-#set_source_files_properties(SeePlusPlus.i PROPERTY CPLUSPLUS ON)
-#set_source_files_properties(SeePlusPlus.i PROPERTY SWIG_FLAGS "-includeall")
+# Ensure file recognized as C++ (otherwise, exported as C file)
+
+set_property(SOURCE src/main/cpp/SeePlusPlus.i PROPERTY CPLUSPLUS ON)
+
+# Setup SWIG flags and locations
+
+set(CMAKE_SWIG_FLAGS -c++ -package com.sureshjoshi.core)
+set(CMAKE_SWIG_OUTDIR ${Project_SOURCE_DIR}/src/main/cpp/wrapper)
+
+# Export a wrapper file to Java, and link with the created C++ library
+
 swig_add_module(SeePlusPlus_Wrapper java src/main/cpp/SeePlusPlus.i)
-
 swig_link_libraries(SeePlusPlus_Wrapper SeePlusPlus)
+
+#
+
+file(GLOB JAVA_FILES ${Project_SOURCE_DIR}/src/main/cpp/wrapper/*.java)
+if (${JAVA_FILES})
+    file(COPY ${JAVA_FILES}
+         DESTINATION ${Project_SOURCE_DIR}/src/main/java/com/sureshjoshi/core)
+    file(remove ${JAVA_FILES})
+endif()
 
 # Specifies libraries CMake should link to your target library. You
 # can link multiple libraries, such as libraries you define in this

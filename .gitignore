@@ -28,3 +28,5 @@ workspace.xml
 NDKExample/.idea/libraries
 SeePlusPlus_wrap.cxx
 NDKExample/app/src/main/java/com/sureshjoshi/core
+AS2/app/src/main/java/com/sureshjoshi/core
+AS2/app/src/main/cpp/wrapper
