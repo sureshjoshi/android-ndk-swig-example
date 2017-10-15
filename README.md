@@ -1,7 +1,9 @@
 # android-ndk-swig-example
-This project is a full example of using Android Studio (1.0+), Gradle (1.0+), NDK, and SWIG to automatically compile and setup C++ libraries and Java wrappers in Android Studio.
+This project has full examples of using Android Studio(s) 1, 2, and 3, Gradle, CMake, the Android NDK, and SWIG to automatically compile and setup C++ libraries and Java wrappers.
 
-Explained in detail here: http://www.sureshjoshi.com/mobile/android-ndk-in-android-studio-with-swig/
+Explained in detail here: http://www.sureshjoshi.com/mobile/android-ndk-in-android-studio-with-swig/ (pending updates to include CMake)
+
+## Android Studio 1
 
 Here are the from-scratch build steps (if you were going to build in your home directory on Linux/Mac - similar for Windows, with slightly revised commands and locations):
 
@@ -21,14 +23,20 @@ The dependencies are:
 * [Android NDK](https://developer.android.com/tools/sdk/ndk/index.html)
 * [SWIG](http://www.swig.org/)
 
-Note: I have updated the Github repo (in the develop branch) to use Android Studio 1.5 with the latest experimental Gradle plugin (0.6.0-alpha3).
+## Android Studio 2/3
+
+Since Android Studio 2.2, CMake and the NDK have a higher status in the Android ecosystem, so Gradle hacks are no longer necessary. The only dependency is:
+
+* [SWIG](http://www.swig.org/) - Which needs to be on your system path too, so CMake can pick it up
+
+SWIG is setup in the CMakeLists.txt file, so you only need to setup the correct directories and source files.
 
 License
 -------
 
 	The MIT License (MIT)
 
-	Copyright (c) 2015 Suresh Joshi
+	Copyright (c) 2017 Suresh Joshi
 
 	Permission is hereby granted, free of charge, to any person obtaining a copy
 	of this software and associated documentation files (the "Software"), to deal
