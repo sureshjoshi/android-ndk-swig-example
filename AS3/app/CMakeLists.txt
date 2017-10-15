@@ -48,6 +48,8 @@ find_library( # Sets the name of the path variable.
 find_package(SWIG REQUIRED)
 include(${SWIG_USE_FILE})
 
+#file(REMOVE_RECURSE ${Project_SOURCE_DIR}/src/main/cpp/wrapper)
+
 # Ensure file recognized as C++ (otherwise, exported as C file)
 
 set_property(SOURCE src/main/cpp/SeePlusPlus.i PROPERTY CPLUSPLUS ON)
@@ -62,13 +64,13 @@ set(CMAKE_SWIG_OUTDIR ${Project_SOURCE_DIR}/src/main/cpp/wrapper)
 swig_add_module(SeePlusPlus_Wrapper java src/main/cpp/SeePlusPlus.i)
 swig_link_libraries(SeePlusPlus_Wrapper SeePlusPlus)
 
-#
+# Copy over the Java files to the correct directory
 
 file(GLOB JAVA_FILES ${Project_SOURCE_DIR}/src/main/cpp/wrapper/*.java)
-if (${JAVA_FILES})
-    file(COPY ${JAVA_FILES}
-         DESTINATION ${Project_SOURCE_DIR}/src/main/java/com/sureshjoshi/core)
-    file(remove ${JAVA_FILES})
+list(LENGTH JAVA_FILES NUM_FILES)
+if(${NUM_FILES} GREATER 0)
+    file(COPY ${JAVA_FILES} DESTINATION ${Project_SOURCE_DIR}/src/main/java/com/sureshjoshi/core)
+    file(REMOVE ${JAVA_FILES})
 endif()
 
 # Specifies libraries CMake should link to your target library. You
