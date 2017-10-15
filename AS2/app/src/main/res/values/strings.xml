@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">NDK Example</string>
+    <string name="multiply_int">Multiplication of ints: </string>
+    <string name="multiply_double">Multiplication of doubles: </string>
+    <string name="random_numbers">A list of random numbers: </string>
+    <string name="unsorted_strings">This list of unsorted strings: </string>
+    <string name="sorted_strings">Becomes this list of sorted strings: </string>
+    <string name="action_settings">Settings</string>
+    <string name="refresh">Refresh</string>
+</resources>
