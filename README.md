@@ -31,6 +31,14 @@ Since Android Studio 2.2, CMake and the NDK have a higher status in the Android 
 
 SWIG is setup in the CMakeLists.txt file, so you only need to setup the correct directories and source files.
 
+**NOTE:** In case of build failing because of `com.sureshjoshi.core` package missing please call
+
+```
+./gradle externalNativeBuildDebug
+```
+
+in the terminal. This will generate the missing C++ wrapper files. After this is finished please hit `sync gradle` which will create `com.sureshjoshi.core` java package to which all the wrapper files will be moved. The project should build successfully now.
+
 License
 -------
 
