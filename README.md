@@ -3,6 +3,26 @@ This project has full examples of using Android Studio(s) 1, 2, and 3, Gradle, C
 
 Explained in detail here: http://www.sureshjoshi.com/mobile/android-ndk-in-android-studio-with-swig/ (pending updates to include CMake)
 
+## Android Studio 2/3
+
+Since Android Studio 2.2, CMake and the NDK have a higher status in the Android ecosystem, so Gradle hacks are no longer necessary. The only dependency is:
+
+* [SWIG](http://www.swig.org/) - Which needs to be on your system path too, so CMake can pick it up
+
+SWIG is setup in the CMakeLists.txt file, so you only need to setup the correct directories and source files.
+
+A common problem with auto-generated code in CMake is that Android Studio will not run the CMake-related commands until AFTER it tries to search through all files. In this repo, that let to a failing build caused by a missing `com.sureshjoshi.core` package. The manual workaround was to call:
+
+```
+./gradle externalNativeBuildDebug
+```
+
+in the terminal to generate the missing C++ wrapper files. 
+
+Now, there is a Gradle hack which will call externalNativeBuild during Gradle's pre-compilation phase, which means that Swig is ALWAYS run before AS looks for Java files. 
+
+For information about junit testing native libraries, please refer to the feature branch "9-junit-native" which has a working implementation for OSx. 
+
 ## Android Studio 1
 
 Here are the from-scratch build steps (if you were going to build in your home directory on Linux/Mac - similar for Windows, with slightly revised commands and locations):
@@ -23,21 +43,6 @@ The dependencies are:
 * [Android NDK](https://developer.android.com/tools/sdk/ndk/index.html)
 * [SWIG](http://www.swig.org/)
 
-## Android Studio 2/3
-
-Since Android Studio 2.2, CMake and the NDK have a higher status in the Android ecosystem, so Gradle hacks are no longer necessary. The only dependency is:
-
-* [SWIG](http://www.swig.org/) - Which needs to be on your system path too, so CMake can pick it up
-
-SWIG is setup in the CMakeLists.txt file, so you only need to setup the correct directories and source files.
-
-**NOTE:** In case of build failing because of `com.sureshjoshi.core` package missing please call
-
-```
-./gradle externalNativeBuildDebug
-```
-
-in the terminal. This will generate the missing C++ wrapper files. After this is finished please hit `sync gradle` which will create `com.sureshjoshi.core` java package to which all the wrapper files will be moved. The project should build successfully now.
 
 License
 -------
