@@ -1,7 +1,6 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
-//apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 
 // Manifest version information
 def versionMajor = 3
@@ -39,11 +38,34 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-//    implementation"org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.0.1'
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     testImplementation 'junit:junit:4.12'
+}
+
+// TODO: Expose this to the test project
+def osxDir = projectDir.absolutePath + '/.externalNativeBuild/cmake/debug/osx/'
+
+task createBuildDir() {
+    def folder = new File(osxDir)
+    if (!folder.exists()) {
+        folder.mkdirs()
+    }
+}
+
+task runCMake(type: Exec) {
+    dependsOn createBuildDir
+    workingDir osxDir // Jump to future build directory
+    commandLine '/usr/local/bin/cmake' // Path from HomeBrew installation
+    args '../../../../' // Relative path for out-of-source builds
+}
+
+task runMake(type: Exec) {
+    dependsOn runCMake
+    workingDir osxDir
+    commandLine 'make'
 }
 
 project.afterEvaluate {
@@ -51,4 +73,7 @@ project.afterEvaluate {
     // complains about missing generated files
     // TODO: Probably need a release hook too?
     javaPreCompileDebug.dependsOn externalNativeBuildDebug
+    if (org.gradle.internal.os.OperatingSystem.current().isMacOsX()) {
+        javaPreCompileDebugAndroidTest.dependsOn runMake
+    }
 }

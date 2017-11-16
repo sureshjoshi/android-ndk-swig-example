@@ -36,17 +36,6 @@ add_library( # Sets the name of the library.
              # Provides the list of files to compile.
              ${SOURCE_FILES} )
 
-# Searches for a specified prebuilt library and stores the path as a
-# variable. Because CMake includes system libraries in the search path by
-# default, you only need to specify the name of the public NDK library
-# you want to add. CMake verifies that the library exists before
-# completing its build.
-find_library( # Sets the name of the path variable.
-              log-lib
-
-              # Specifies the name of the NDK library that you want CMake to locate.
-              log )
-
 # Fail the build if SWIG is not found - Ensure SWIG is installed and on the system path
 # TODO: Does this run for EACH architecture?
 find_package(SWIG REQUIRED)
@@ -56,7 +45,7 @@ include(${SWIG_USE_FILE})
 file(REMOVE_RECURSE ${JAVA_GEN_DIR})
 
 # Ensure file recognized as C++ (otherwise, exported as C file)
-set_property(SOURCE src/main/cpp/SeePlusPlus.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE ${SWIG_I_FILE} PROPERTY CPLUSPLUS ON)
 
 # Setup SWIG flags and locations
 set(CMAKE_SWIG_FLAGS -c++ -package ${JAVA_GEN_PACKAGE})
@@ -66,12 +55,44 @@ set(CMAKE_SWIG_OUTDIR ${JAVA_GEN_DIR})
 swig_add_module(SeePlusPlus_Wrapper java ${SWIG_I_FILE})
 swig_link_libraries(SeePlusPlus_Wrapper SeePlusPlus)
 
-# Specifies libraries CMake should link to your target library. You
-# can link multiple libraries, such as libraries you define in this
-# build script, prebuilt third-party libraries, or system libraries.
-target_link_libraries( # Specifies the target library.
-                       SeePlusPlus
+# Need to create the .dylib and .jnilib files in order to run JUnit tests
+if (APPLE)
 
-                       # Links the target library to the log library
-                       # included in the NDK.
-                       ${log-lib} )
+    # Ensure jni.h is found
+    find_package(JNI REQUIRED)
+    include_directories(${JAVA_INCLUDE_PATH})
+
+    #find_package(SWIG REQUIRED)
+    #include(${SWIG_USE_FILE})
+    #set_property(SOURCE ${SWIG_I_FILE} PROPERTY CPLUSPLUS ON)
+
+    #set(CMAKE_SWIG_FLAGS -c++ -package com.sureshjoshi.core)
+    #set(CMAKE_SWIG_OUTDIR ${Project_SOURCE_DIR}/src/main/cpp/wrapper)
+
+    #swig_add_library(SeePlusPlus_Wrapper LANGUAGE java SOURCES ${SWIG_I_FILE})
+    #swig_link_libraries(SeePlusPlus_Wrapper SeePlusPlus)
+
+else()
+
+    # Searches for a specified prebuilt library and stores the path as a
+    # variable. Because CMake includes system libraries in the search path by
+    # default, you only need to specify the name of the public NDK library
+    # you want to add. CMake verifies that the library exists before
+    # completing its build.
+    find_library( # Sets the name of the path variable.
+                  log-lib
+
+                  # Specifies the name of the NDK library that you want CMake to locate.
+                  log )
+
+    # Specifies libraries CMake should link to your target library. You
+    # can link multiple libraries, such as libraries you define in this
+    # build script, prebuilt third-party libraries, or system libraries.
+    target_link_libraries( # Specifies the target library.
+                           SeePlusPlus
+
+                           # Links the target library to the log library
+                           # included in the NDK.
+                           ${log-lib} )
+
+endif()
