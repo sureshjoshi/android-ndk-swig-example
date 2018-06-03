@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.sureshjoshi.core.ISeePlusPlusInterface;
 import com.sureshjoshi.core.IntVector;
 import com.sureshjoshi.core.SeePlusPlus;
 import com.sureshjoshi.core.StringVector;
@@ -41,6 +42,9 @@ public class MainActivity extends Activity {
     @BindView(R.id.textview_android_studio_ndk_integration)
     TextView mTextviewAndroidStudioNdkIntegration;
 
+    @BindView(R.id.textview_android_studio_ndk_callback)
+    TextView mTextviewAndroidStudioNdkCallback;
+
     @OnClick(R.id.button_refresh)
     void onClick() {
         runNativeFunctions();
@@ -62,6 +66,17 @@ public class MainActivity extends Activity {
         mTextviewRandomNumbers.setText(runRandomNumbers());
         mTextviewSortedStrings.setText(runSortString());
 //        mTextviewAndroidStudioNdkIntegration.setText(runAndroidStudioNativeString());
+        getStringFromCppCallback();
+    }
+
+    private void getStringFromCppCallback() {
+        mCpp.returnViaCallback("test string", new ISeePlusPlusInterface() {
+
+            @Override
+            public void print(String text) {
+                mTextviewAndroidStudioNdkCallback.setText(text);
+            }
+        });
     }
 
     String runMultiplyInts() {

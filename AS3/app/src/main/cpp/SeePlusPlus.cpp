@@ -39,3 +39,7 @@ std::vector<std::string> SeePlusPlus::Sort(const std::vector<std::string> &inStr
     std::sort(std::begin(sortedList), std::end(sortedList));
     return sortedList;
 }
+
+void SeePlusPlus::returnViaCallback(const std::string input, ISeePlusPlusInterface * callbackInterface) {
+    callbackInterface->print(input);
+}

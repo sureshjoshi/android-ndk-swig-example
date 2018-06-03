@@ -1,10 +1,13 @@
 /* File : SeePlusPlus.i */
-%module SeePlusPlus_Wrapper
+%module(directors="1") SeePlusPlus_Wrapper
 
 /* Anything in the following section is added verbatim to the .cxx wrapper file */ 
 %{
 #include "SeePlusPlus.h"
+#include "ISeePlusPlusInterface.h"
 %}
+
+%feature("director") ISeePlusPlusInterface;
 
 /* This will allow us to iterate through arrays defined by STL containers */
 %include "std_string.i"
@@ -20,3 +23,4 @@ namespace std {
 /* For Java, it seems we need the file of interest and all files up the inheritance tree */
 %include "ISeePlusPlus.h"
 %include "SeePlusPlus.h"
+%include "ISeePlusPlusInterface.h"
