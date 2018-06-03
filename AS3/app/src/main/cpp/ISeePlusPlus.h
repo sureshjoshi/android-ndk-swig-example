@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include "ISeePlusPlusInterface.h"
 
 /**
  *  @file 
@@ -54,6 +55,9 @@ namespace SJ {
          */
         virtual std::vector<std::string> Sort(const std::vector<std::string> &inStrings)=0;
 
+        virtual void returnViaCallback(const std::string input, ISeePlusPlusInterface * callbackInterface)=0;
+
     }; // class ISeePlusPlus
+
 } // namespace SJ
 #endif // __SJ_ISEEPLUSPLUS_H__

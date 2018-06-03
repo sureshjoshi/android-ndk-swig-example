@@ -60,6 +60,8 @@ namespace SJ {
          */
         virtual std::vector<std::string> Sort(const std::vector<std::string> &inStrings);
 
+        virtual void returnViaCallback(const std::string input, ISeePlusPlusInterface * callbackInterface);
+
     }; // class SeePlusPlus
 } // namespace SJ
 #endif // __SJ_SEEPLUSPLUS_H__
